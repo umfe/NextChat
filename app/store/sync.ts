@@ -12,6 +12,7 @@ import { downloadAs, readFromFile } from "../utils";
 import { showToast } from "../components/ui-lib";
 import Locale from "../locales";
 import { createSyncClient, ProviderType } from "../utils/cloud";
+import { isValidServerSyncUsername } from "../utils/cloud/server";
 
 export interface WebDavConfig {
   server: string;
@@ -39,6 +40,11 @@ const DEFAULT_SYNC_STATE = {
     apiKey: "",
   },
 
+  server: {
+    username: "",
+    accessCode: "",
+  },
+
   lastSyncTime: 0,
   lastProvider: "",
 };
@@ -47,6 +53,13 @@ export const useSyncStore = createPersistStore(
   DEFAULT_SYNC_STATE,
   (set, get) => ({
     cloudSync() {
+      if (get().provider === ProviderType.Server) {
+        return (
+          isValidServerSyncUsername(get().server.username) &&
+          get().server.accessCode.length > 0
+        );
+      }
+
       const config = get()[get().provider];
       return Object.values(config).every((c) => c.toString().length > 0);
     },
@@ -106,6 +119,8 @@ export const useSyncStore = createPersistStore(
           const parsedRemoteState = JSON.parse(
             await client.get(config.username),
           ) as AppState;
+          // mergeAppState 会原地把 remote 合并进 localState（无返回值，直接改第一个参数）
+          // setLocalAppState 再把合并后的 localState 写回 chat/access/config/mask/prompt 各个 store，触发 UI 刷新
           mergeAppState(localState, parsedRemoteState);
           setLocalAppState(localState);
         }

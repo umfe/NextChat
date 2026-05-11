@@ -255,6 +255,12 @@ const cn = {
           UserName: "备份名称",
           Password: "UpStash Redis REST Token",
         },
+
+        Server: {
+          UserName: "用户名",
+          UserNameSubTitle: "3-12 位，仅允许大小写字母、数字、- 和 _",
+          AccessCode: "访问码",
+        },
       },
 
       LocalState: "本地数据",

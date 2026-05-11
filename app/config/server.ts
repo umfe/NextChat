@@ -96,6 +96,13 @@ declare global {
       DEFAULT_INPUT_TEMPLATE?: string;
 
       ENABLE_MCP?: string; // enable mcp functionality
+
+      X_ACCESS_CODE?: string; // server sync access code
+      X_AWS_BUCKET?: string; // server sync bucket
+      X_AWS_ENDPOINT?: string; // server sync S3 endpoint
+      X_AWS_ACCESS_KEY?: string; // server sync S3 access key
+      X_AWS_SECRET_KEY?: string; // server sync S3 secret key
+      X_AWS_PREFIX?: string; // server sync S3 object prefix
     }
   }
 }
